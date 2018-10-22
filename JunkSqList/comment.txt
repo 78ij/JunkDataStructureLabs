@@ -1,0 +1,103 @@
+printf("/*\n");
+printf("* AUTHOR: Jiamu Sun\n");
+printf("* EMAIL: x739566858@outlook.com\n");
+printf("* GITHUB: 78ij\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: InitaList\n");
+printf("* Parameter: SqList &L\n");
+printf("* Return: Status(int)\n");
+printf("* Use: initialize the linear list\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: DestroyList\n");
+printf("* Parameter: SqList &L\n");
+printf("* Return: Status(int)\n");
+printf("* Use: destroy the linear list\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ClearList\n");
+printf("* Parameter: SqList &L\n");
+printf("* Return: Status(int)\n");
+printf("* Use: make the list empty\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ListEmpty\n");
+printf("* Parameter: const SqList &L\n");
+printf("* Return: bool\n");
+printf("* Use: check if the list is empty.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ListLength\n");
+printf("* Parameter: SqList &L\n");
+printf("* Return: int\n");
+printf("* Use: returns the length of the list.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: GetElem\n");
+printf("* Parameter: const SqList &L, int i ElemType &e\n");
+printf("* Return: Status(int)\n");
+printf("* Use: get the i-th element of the list(i starts from 1)\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: LocateElem\n");
+printf("* Parameter: const SqList &L, const ElemType &e\n");
+printf("* Return: int\n");
+printf("* Use: return the number of the element that equals the parameter(number starts from 1)\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: PriorElem\n");
+printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &pre_e\n");
+printf("* Return: Status(int)\n");
+printf("* Use: get the the prior element of the specified element, pass it using parameter.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: NextElem\n");
+printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &next_e\n");
+printf("* Return: Status(int)\n");
+printf("* Use: get the the next element of the specified element, pass it using parameter.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ListInsert\n");
+printf("* Parameter: SqList &L, int i, ElemType &e\n");
+printf("* Return: Status(int)\n");
+printf("* Use: insert an element after the specifyed number(the list must be non-empty)\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ListDelete\n");
+printf("* Parameter: SqList &L, int i, ElemType &e\n");
+printf("* Return: Status(int)\n");
+printf("* Use: Delete the specified element.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+
+printf("/*\n");
+printf("* Function Name: ListTraverse\n");
+printf("* Parameter: const SqList &L\n");
+printf("* Return: Status(int)\n");
+printf("* Use: Traverse the list and output its elements.\n");
+printf("please enter the id of the list:");
+scanf("%d", &list_index);
+

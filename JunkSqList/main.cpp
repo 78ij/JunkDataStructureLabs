@@ -1,0 +1,364 @@
+#include "SqList.h"
+
+void PrintMenu(void) {
+	/*
+	* Function Name: PrintMenu
+	* Parameter: None
+	* Return: None
+	* Use: Print the main menu
+	*/
+
+	printf("\n+---------------------------------------------------+\n");
+	printf("|                *THE* LINEAR LIST DEMO               |\n");
+	printf("|                                                     |\n");
+	printf("|                     Functions                       |\n");
+	printf("|                                                     |\n");
+	printf("|      1.InitalList             2.DestroyList         |\n");
+	printf("|      3.ClearList              4.IsListEmpty         |\n");
+	printf("|      5.ListLength             6.GetElem             |\n");
+	printf("|      7.LocateElem             8.PriorElem           |\n");
+	printf("|      9.NextElem              10.ListInsert          |\n");
+	printf("|     11.ListDelete            12.ListTraverse        |\n");
+	printf("|                                                     |\n");
+	printf("|                      0.Exit                         |\n");
+	printf("|                                                     |\n");
+	printf("|                      78ij@8102                      |\n");
+	printf("|                                                     |\n");
+	printf("+-----------------------------------------------------+\n");
+	printf("\n");
+
+}
+
+status LoadData(SqList **head) {
+	/*
+	* Function Name: LoadData
+	* Parameter: std::vector<SqList> lists
+	* Return Status(int)
+	* Use: load data from file
+	*/
+	FILE *fp = fopen("SLDB", "rb");
+	if (fp == NULL)
+		return ERROR;
+
+	int size = 0;
+	int count = 0;
+	SqList *tmp = (SqList *)malloc(sizeof(SqList));
+	size = fread(tmp, sizeof(SqList), 1, fp);
+	if (size == 0)
+		return OK;
+	count++;
+	tmp->head = (int *)malloc(sizeof(int) * tmp->listsize);
+	size = fread(tmp->head, sizeof(int) * tmp->listsize, 1, fp);
+	*head = tmp;
+	
+
+	while (1) {
+		SqList *tmp = (SqList *)malloc(sizeof(SqList));
+		size = fread(tmp, sizeof(SqList), 1, fp);
+		if (size == 0)
+			break;
+		count++;
+		tmp->head = (int *)malloc(sizeof(int) * tmp->listsize);
+		size = fread(tmp->head, sizeof(int) * tmp->listsize, 1, fp);
+		(*head)->next = tmp;
+		*head = (*head)->next;
+	}
+
+	*head = tmp;
+	fclose(fp);
+	return OK;
+}
+
+status SaveData(SqList *head) {
+	/*
+	* Function Name: SaveData
+	* Parameter: vector<SqList> lists
+	* Return: Status(int)
+	* Use: save data to file
+	*/
+
+	FILE *fp = fopen("SLDB", "wb");
+	if (fp == NULL)
+		return ERROR;
+
+	SqList *L = head,*p = head;
+	while (L != NULL) {
+		fwrite(L, sizeof(SqList), 1, fp);
+		fwrite(L->head, sizeof(int) * L->listsize, 1, fp);
+		p = L->next;
+		DestroyList(*L);
+		L = p;
+	}
+
+	fclose(fp);
+	return OK;
+}
+
+
+int main() {
+	int selection = -1;
+	SqList *head = NULL;
+	while (selection != 0){
+		PrintMenu();
+		scanf("%d", &selection);
+		LoadData(&head);
+		SqList *L = head;
+		SqList *tmp = head;
+		int list_index;
+		switch (selection) {
+		case -1: //for debug purposes
+			while (head != NULL) {
+				printf("ListID:%d\tListlength:%d\tListsize:%d\n", head->ListID,head->length,head->listsize);
+				head = head->next;
+			}
+			head = L;
+			break;
+		case 1:
+			printf("* Function Name: InitaList\n");
+			printf("* Parameter: SqList &L\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: initialize the linear list\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head != NULL) {
+				printf("Error, the list %d already exist.\n", list_index);
+			}
+			else {
+				SqList *new_list = (SqList *)malloc(sizeof(SqList));
+				if (IntiaList(*new_list) == OK) {
+					printf("Inital the list %d succeed.\n", list_index);
+					new_list->ListID = list_index;
+					new_list->next = L;
+					head = new_list;
+				}
+				else {
+					printf("ERROR, something wrong with the RAM\n");
+				}
+			}
+			printf("\n");
+			break;
+		case 2:
+			printf("/*\n");
+			printf("* Function Name: DestroyList\n");
+			printf("* Parameter: SqList &L\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: destroy the linear list\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			
+			if (head->ListID == list_index) {
+				head = head->next;
+				DestroyList(*L);
+				printf("List %d has been removed\n", list_index);
+				break;
+			}
+			while (head->next != NULL) {
+				if (head->next->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head->next == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				L = head->next;
+				head->next = head->next->next;
+				DestroyList(*L);
+				printf("List %d has been removed\n", list_index);
+				head = tmp;
+			}
+			printf("\n");
+			break;
+		case 3:
+			printf("* Function Name: ClearList\n");
+			printf("* Parameter: SqList &L\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: make the list empty\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				ClearList(*head);
+				head = L;
+				printf("the list %d has been cleared.\n", list_index);
+			}
+
+			printf("\n");
+			break;
+		case 4:
+			printf("* Function Name: ListEmpty\n");
+			printf("* Parameter: const SqList &L\n");
+			printf("* Return: bool\n");
+			printf("* Use: check if the list is empty.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				bool isempty = ListEmpty(*head);
+				head = L;
+				if(isempty)
+					printf("the list %d is empty.\n", list_index);
+				else 
+					printf("the list %d is not empty.\n", list_index);
+
+			}
+
+			printf("\n");
+			break;
+		case 5:
+			printf("* Function Name: ListLength\n");
+			printf("* Parameter: SqList &L\n");
+			printf("* Return: int\n");
+			printf("* Use: returns the length of the list.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				int length = ListLength(*head);
+				head = L;
+				printf("the list %d's length is %d.\n", list_index, length);
+			}
+			printf("\n");
+			break;
+		case 6:
+			printf("* Function Name: GetElem\n");
+			printf("* Parameter: const SqList &L, int i ElemType &e\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: get the i-th element of the list(i starts from 1)\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				printf("please enter the element number:\n");
+				int num;
+				ElemType value;
+				scanf("%d", &num);
+				status res = GetElem(*head, num, value);
+				head = L;
+
+				if (res == ERROR) {
+					printf("Sorry, your number is out of bound.\n");
+					break;
+				}
+				else
+					printf("the element value is %d.\n", value);
+
+			}
+			printf("\n");
+			break;
+		case 7:
+			printf("* Function Name: LocateElem\n");
+			printf("* Parameter: const SqList &L, const ElemType &e\n");
+			printf("* Return: int\n");
+			printf("* Use: return the number of the element that equals the parameter(number starts from 1)\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				printf("please enter the element value:\n");
+				ElemType value;
+				scanf("%d", &value);
+				int res = LocateElem(*head, value);
+				head = L;
+
+				if (res == 0) {
+					printf("Sorry, no such element.\n");
+					break;
+				}
+				else
+					printf("the element number is %d.\n", res);
+
+			}
+			printf("\n");
+			break;
+		case 8:
+			printf("* Function Name: PriorElem\n");
+			printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &pre_e\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: get the the prior element of the specified element, pass it using parameter.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				printf("please enter the element value:\n");
+				ElemType cur;
+				ElemType value;
+				scanf("%d", &cur);
+				status res =PriorElem(*head, cur,value);
+				head = L;
+
+				if (res == ERROR) {
+					printf("Sorry, we encounter an error.\n");
+					break;
+				}
+				else
+					printf("the prior element number is %d.\n", value);
+
+			}
+			printf("\n");
+			break;
+		case 0:
+			printf("Thank you for using~\n");
+			break;
+		default:
+			printf("no such selection.\n");
+			break;
+		}
+		SaveData(head);
+	}
+}
+
