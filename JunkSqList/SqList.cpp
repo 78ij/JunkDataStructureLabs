@@ -122,9 +122,9 @@ status PriorElem(const SqList &L, const ElemType &cur_e, ElemType &pre_e) {
 * Return: Status(int)
 * Use: get the the next element of the specified element, pass it using parameter.
 */
-status NextElem(const SqList &L, ElemType &cur_e, ElemType &next_e) {
+status NextElem(const SqList &L, const ElemType &cur_e, ElemType &next_e) {
 	int loc = LocateElem(L, cur_e);
-	if (loc == L.length) return ERROR;
+	if (loc == L.length || loc == 0) return ERROR;
 	else {
 		loc++;
 		GetElem(L, loc, next_e);
@@ -144,14 +144,8 @@ status ListInsert(SqList &L, int i, ElemType &e) {
 		if (L.listsize + LISTINCREMENT > LIST_MAX) return OVERFLOW;
 		L.listsize += LISTINCREMENT;
 		ElemType *temp = L.head;
-		L.head = (ElemType *)malloc(sizeof(ElemType) * L.listsize);
-		if (L.head == NULL) //∑÷≈‰ ß∞‹
-			return ERROR;
-		for (int j = 0; j < L.length; j++) {
-			*(L.head + j) = *(temp + j);
-		}
-		free(temp);
-		temp = NULL; //∑¿÷π“∞÷∏’Î
+		L.head = (ElemType *)realloc(L.head,sizeof(ElemType) * L.listsize);
+
 	}
 	for (int j = L.length - 1; j >= i - 1; j--) {
 		*(L.head + j + 1) = *(L.head + j);

@@ -351,6 +351,129 @@ int main() {
 			}
 			printf("\n");
 			break;
+		case 9:
+			printf("* Function Name: NextElem\n");
+			printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &next_e\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: get the the next element of the specified element, pass it using parameter.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				printf("please enter the element value:\n");
+				ElemType cur;
+				ElemType value;
+				scanf("%d", &cur);
+				status res = NextElem(*head, cur, value);
+				head = L;
+
+				if (res == ERROR) {
+					printf("Sorry, we encounter an error.\n");
+					break;
+				}
+				else
+					printf("the next element number is %d.\n", value);
+
+			}
+			printf("\n");
+			break;
+		case 10:
+			printf("* Function Name: ListInsert\n");
+			printf("* Parameter: SqList &L, int i, ElemType &e\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: insert an element after the specifyed number(the list must be non-empty)\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				int num;
+				ElemType e;
+				printf("please input the number of the element\n");
+				scanf("%d", &num);
+				printf("please input the inserted value:\n");
+				scanf("%d", &e);
+				status res = ListInsert(*head, num, e);
+				head = L;
+				if (res == ERROR) {
+					printf("Sorry, we encounter an error.\n");
+					break;
+				}
+				else
+					printf("value %d has been successfully insert to the %d position of %d list.", e, num, list_index);
+			}
+			printf("\n");
+			break;
+		case 11:
+			printf("* Function Name: ListDelete\n");
+			printf("* Parameter: SqList &L, int i, ElemType &e\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: Delete the specified element.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				int num;
+				printf("please input the number of the element\n");
+				scanf("%d", &num);
+				ElemType e;
+				status res = ListDelete(*head, num,e);
+				head = L;
+				if (res == ERROR) {
+					printf("Sorry, we encounter an error.\n");
+					break;
+				}
+				else
+					printf("value %d has benn successfully delete, it's in %d position of %d list.", e, num, list_index);
+			}
+			printf("\n");
+			break;
+		case 12:
+			printf("* Function Name: ListTraverse\n");
+			printf("* Parameter: const SqList &L\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: Traverse the list and output its elements.\n");
+			printf("please enter the id of the list:");
+			scanf("%d", &list_index);
+			while (head != NULL) {
+				if (head->ListID == list_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				head = L;
+			}
+			else {
+				printf("Traverse the %d-th list:\n", list_index);
+				ListTraverse(*head);
+				head = L;
+			}
+			printf("\n");
+			break;
 		case 0:
 			printf("Thank you for using~\n");
 			break;
