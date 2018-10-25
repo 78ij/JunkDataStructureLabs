@@ -14,9 +14,10 @@
 * Use: initialize the linear list
 */
 status IntiaList(SqList &L) {
-	L.length = 0;
+	L.length = 1;
 	L.listsize = LIST_INIT_SIZE;
 	L.head = (ElemType *)malloc(sizeof(ElemType) * LIST_INIT_SIZE);
+	*(int*)L.head = 1;
 	if (L.head == NULL) //∑÷≈‰ ß∞‹
 		return ERROR;
 	else return OK;
@@ -95,7 +96,7 @@ int LocateElem(const SqList &L, const ElemType &e) {
 	for (int i = 1; i <= L.length; i++) {
 		ElemType ele;
 		GetElem(L, i, ele);
-		if (ele == e) return i + 1;
+		if (ele == e) return i;
 	}
 	return 0;
 }
@@ -163,6 +164,7 @@ status ListInsert(SqList &L, int i, ElemType &e) {
 */
 status ListDelete(SqList &L, int i, ElemType &e) {
 	if (i < 1 || i > L.length) return ERROR;
+	L.length--;
 	GetElem(L, i, e);
 	for (int j = i; j < L.length - 1; j++) {
 		*(L.head + j - 1) = *(L.head + j);

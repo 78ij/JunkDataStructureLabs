@@ -1,5 +1,5 @@
-#ifndef SQLIST_H
-#define SQLIST_H
+#ifndef SqList_H
+#define SqList_H
 
 #include "common.h"
 
@@ -34,4 +34,4 @@ status ListTraverse(const SqList &L);  //¼ò»¯¹ý
 
 
 
-#endif //SQLIST_H
+#endif //SqList_H
