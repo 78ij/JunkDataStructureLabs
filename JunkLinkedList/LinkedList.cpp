@@ -17,6 +17,11 @@ status IntiaList(LinkedList &L) {
 	if (L.head == NULL) return ERROR;
 	L.head->next = NULL;
 	L.length = 0;
+	/*L.length = 1;
+	LinkedListNode *tmp = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+	tmp->data = 1;
+	L.head->next = tmp;
+	tmp->next = NULL;*/
 	return OK;
 }
 
@@ -195,7 +200,7 @@ status ListDelete(LinkedList &L, int i, ElemType &e) {
 * Use: Traverse the list and output its elements.
 */
 status ListTraverse(const LinkedList &L) {
-	LinkedListNode *ele = L.head;
+	LinkedListNode *ele = L.head->next;
 	while (ele != NULL) {
 		cout << ele->data << " ";
 		ele = ele->next;

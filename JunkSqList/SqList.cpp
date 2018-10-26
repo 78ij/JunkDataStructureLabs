@@ -14,10 +14,8 @@
 * Use: initialize the linear list
 */
 status IntiaList(SqList &L) {
-	L.length = 1;
 	L.listsize = LIST_INIT_SIZE;
 	L.head = (ElemType *)malloc(sizeof(ElemType) * LIST_INIT_SIZE);
-	*(int*)L.head = 1;
 	if (L.head == NULL) //∑÷≈‰ ß∞‹
 		return ERROR;
 	else return OK;

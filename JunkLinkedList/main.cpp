@@ -104,7 +104,7 @@ status SaveData(LinkedList *head) {
 		fwrite(L, sizeof(LinkedList), 1, fp);
 		LinkedListNode *ele = L->head->next;
 		while (ele != NULL) {
-			fwrite(&(ele),sizeof(LinkedListNode), 1, fp);
+			fwrite(ele,sizeof(LinkedListNode), 1, fp);
 			ele = ele->next;
 		}
 		p = L->next;
