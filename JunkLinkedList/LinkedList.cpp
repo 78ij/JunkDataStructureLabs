@@ -17,6 +17,7 @@ status IntiaList(LinkedList &L) {
 	if (L.head == NULL) return ERROR;
 	L.head->next = NULL;
 	L.length = 0;
+	return OK;
 }
 
 /*
@@ -67,8 +68,8 @@ status ClearList(LinkedList &L) {
 */
 
 bool ListEmpty(const LinkedList &L) {
-	if (L.length == 0) return false;
-	else return true;
+	if (L.length == 0) return true;
+	else return false;
 }
 
 /*
@@ -121,7 +122,7 @@ int LocateElem(const LinkedList &L, const ElemType &e) {
 * Return: Status(int)
 * Use: get the the prior element of the specified element, pass it using parameter.
 */
-status PriorElem(const LinkedList &L, const ElemType &cur_e, ELemType &pre_e) {
+status PriorElem(const LinkedList &L, const ElemType &cur_e, ElemType &pre_e) {
 	int loc = LocateElem(L, cur_e);
 	if (loc == 0 || loc == 1) return ERROR;
 	else {
@@ -153,3 +154,52 @@ status NextElem(const LinkedList &L, const ElemType &cur_e, ElemType &next_e) {
 * Return: Status(int)
 * Use: insert an element after the specifyed number(the list must be non-empty)
 */
+status ListInsert(LinkedList &L, int i, ElemType &e) {
+	if (i < 1 || i > L.length) return ERROR;
+	LinkedListNode *ele = L.head;
+	for (int j = 0; j < i; j++) {
+		ele = ele->next;
+	}
+	LinkedListNode *tmp = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+	tmp->data = e;
+	tmp->next = ele->next;
+	ele->next = tmp;
+	L.length++;
+	return OK;
+}
+
+/*
+* Function Name: ListDelete
+* Parameter: LinkedList &L, int i, ElemType &e
+* Return: Status(int)
+* Use: Delete the specified element.
+*/
+status ListDelete(LinkedList &L, int i, ElemType &e) {
+	if (i < 1 || i > L.length) return ERROR;
+	L.length--;
+	GetElem(L, i, e);
+	LinkedListNode *ele = L.head;
+	for (int j = 0; j < i - 1; j++) {
+		ele = ele->next;
+	}
+	LinkedListNode *tmp = ele->next;
+	ele->next = tmp->next;
+	free(tmp);
+	return OK;
+}
+
+/*
+* Function Name: ListTraverse
+* Parameter: const LinkedList &L
+* Return: Status(int)
+* Use: Traverse the list and output its elements.
+*/
+status ListTraverse(const LinkedList &L) {
+	LinkedListNode *ele = L.head;
+	while (ele != NULL) {
+		cout << ele->data << " ";
+		ele = ele->next;
+	}
+	cout << endl;
+	return OK;
+}

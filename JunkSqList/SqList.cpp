@@ -179,8 +179,8 @@ status ListDelete(SqList &L, int i, ElemType &e) {
 * Use: Traverse the list and output its elements.
 */
 status ListTraverse(const SqList &L) {
+	ElemType e;
 	for (int i = 1; i <= L.length; i++) {
-		ElemType e;
 		GetElem(L, i, e);
 		cout << e << " ";
 	}

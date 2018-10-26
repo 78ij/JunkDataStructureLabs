@@ -15,6 +15,8 @@ typedef struct LinkedListNode {
 typedef struct LinkedList{
 	int length;
 	LinkedListNode *head;
+	LinkedList *next;
+	int ListID = -1;
 } LinkedList;
 
 status IntiaList(LinkedList &L);

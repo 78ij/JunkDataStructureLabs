@@ -1,4 +1,4 @@
-#include "SqList.h"
+#include "LinkedList.h"
 
 void PrintMenu(void) {
 	/*
@@ -29,10 +29,10 @@ void PrintMenu(void) {
 
 }
 
-status LoadData(SqList **head) {
+status LoadData(LinkedList **head) {
 	/*
 	* Function Name: LoadData
-	* Parameter: std::vector<SqList> lists
+	* Parameter: std::vector<LinkedList> lists
 	* Return Status(int)
 	* Use: load data from file
 	*/
@@ -42,24 +42,42 @@ status LoadData(SqList **head) {
 
 	int size = 0;
 	int count = 0;
-	SqList *tmp = (SqList *)malloc(sizeof(SqList));
-	size = fread(tmp, sizeof(SqList), 1, fp);
+	LinkedList *tmp = (LinkedList *)malloc(sizeof(LinkedList));
+	size = fread(tmp, sizeof(LinkedList), 1, fp);
+	tmp->head = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+	tmp->head->next = NULL;
 	if (size == 0)
 		return OK;
 	count++;
-	tmp->head = (int *)malloc(sizeof(int) * tmp->listsize);
-	size = fread(tmp->head, sizeof(int) * tmp->listsize, 1, fp);
+	LinkedListNode *ele = tmp->head;
+	LinkedListNode *ele2;
+	for (int i = 0; i < tmp->length; i++) {
+		ele2 = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+		fread(ele2, sizeof(LinkedListNode), 1, fp);
+		ele->next = ele2;
+		ele = ele->next;
+	}
+	ele->next = NULL;
 	*head = tmp;
-	
+
 
 	while (1) {
-		SqList *tmp = (SqList *)malloc(sizeof(SqList));
-		size = fread(tmp, sizeof(SqList), 1, fp);
+		LinkedList *tmp = (LinkedList *)malloc(sizeof(LinkedList));
+		size = fread(tmp, sizeof(LinkedList), 1, fp);
 		if (size == 0)
 			break;
 		count++;
-		tmp->head = (int *)malloc(sizeof(int) * tmp->listsize);
-		size = fread(tmp->head, sizeof(int) * tmp->listsize, 1, fp);
+		tmp->head = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+		tmp->head->next = NULL;
+		LinkedListNode *ele3 = tmp->head;
+		LinkedListNode *ele4;
+		for (int i = 0; i < tmp->length; i++) {
+			ele4 = (LinkedListNode *)malloc(sizeof(LinkedListNode));
+			fread(ele4, sizeof(LinkedListNode), 1, fp);
+			ele3->next = ele4;
+			ele3 = ele3->next;
+		}
+		ele3->next = NULL;
 		(*head)->next = tmp;
 		*head = (*head)->next;
 	}
@@ -69,10 +87,10 @@ status LoadData(SqList **head) {
 	return OK;
 }
 
-status SaveData(SqList *head) {
+status SaveData(LinkedList *head) {
 	/*
 	* Function Name: SaveData
-	* Parameter: vector<SqList> lists
+	* Parameter: vector<LinkedList> lists
 	* Return: Status(int)
 	* Use: save data to file
 	*/
@@ -81,10 +99,14 @@ status SaveData(SqList *head) {
 	if (fp == NULL)
 		return ERROR;
 
-	SqList *L = head,*p = head;
+	LinkedList *L = head, *p = head;
 	while (L != NULL) {
-		fwrite(L, sizeof(SqList), 1, fp);
-		fwrite(L->head, sizeof(int) * L->listsize, 1, fp);
+		fwrite(L, sizeof(LinkedList), 1, fp);
+		LinkedListNode *ele = L->head->next;
+		while (ele != NULL) {
+			fwrite(&(ele),sizeof(LinkedListNode), 1, fp);
+			ele = ele->next;
+		}
 		p = L->next;
 		DestroyList(*L);
 		L = p;
@@ -97,25 +119,25 @@ status SaveData(SqList *head) {
 
 int main() {
 	int selection = -1;
-	SqList *head = NULL;
-	while (selection != 0){
+	LinkedList *head = NULL;
+	while (selection != 0) {
 		PrintMenu();
 		scanf("%d", &selection);
 		LoadData(&head);
-		SqList *L = head;
-		SqList *tmp = head;
+		LinkedList *L = head;
+		LinkedList *tmp = head;
 		int list_index;
 		switch (selection) {
 		case -1: //for debug purposes
 			while (head != NULL) {
-				printf("ListID:%d\tListlength:%d\tListsize:%d\n", head->ListID,head->length,head->listsize);
+				printf("ListID:%d\tListlength:%d\t\n", head->ListID, head->length);
 				head = head->next;
 			}
 			head = L;
 			break;
 		case 1:
 			printf("* Function Name: InitaList\n");
-			printf("* Parameter: SqList &L\n");
+			printf("* Parameter: LinkedList &L\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: initialize the linear list\n");
 			printf("please enter the id of the list:");
@@ -129,7 +151,7 @@ int main() {
 				printf("Error, the list %d already exist.\n", list_index);
 			}
 			else {
-				SqList *new_list = (SqList *)malloc(sizeof(SqList));
+				LinkedList *new_list = (LinkedList *)malloc(sizeof(LinkedList));
 				if (IntiaList(*new_list) == OK) {
 					printf("Inital the list %d succeed.\n", list_index);
 					new_list->ListID = list_index;
@@ -145,12 +167,12 @@ int main() {
 		case 2:
 			printf("/*\n");
 			printf("* Function Name: DestroyList\n");
-			printf("* Parameter: SqList &L\n");
+			printf("* Parameter: LinkedList &L\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: destroy the linear list\n");
 			printf("please enter the id of the list:");
 			scanf("%d", &list_index);
-			
+
 			if (head->ListID == list_index) {
 				head = head->next;
 				DestroyList(*L);
@@ -177,7 +199,7 @@ int main() {
 			break;
 		case 3:
 			printf("* Function Name: ClearList\n");
-			printf("* Parameter: SqList &L\n");
+			printf("* Parameter: LinkedList &L\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: make the list empty\n");
 			printf("please enter the id of the list:");
@@ -201,7 +223,7 @@ int main() {
 			break;
 		case 4:
 			printf("* Function Name: ListEmpty\n");
-			printf("* Parameter: const SqList &L\n");
+			printf("* Parameter: const LinkedList &L\n");
 			printf("* Return: bool\n");
 			printf("* Use: check if the list is empty.\n");
 			printf("please enter the id of the list:");
@@ -218,9 +240,9 @@ int main() {
 			else {
 				bool isempty = ListEmpty(*head);
 				head = L;
-				if(isempty)
+				if (isempty)
 					printf("the list %d is empty.\n", list_index);
-				else 
+				else
 					printf("the list %d is not empty.\n", list_index);
 
 			}
@@ -229,7 +251,7 @@ int main() {
 			break;
 		case 5:
 			printf("* Function Name: ListLength\n");
-			printf("* Parameter: SqList &L\n");
+			printf("* Parameter: LinkedList &L\n");
 			printf("* Return: int\n");
 			printf("* Use: returns the length of the list.\n");
 			printf("please enter the id of the list:");
@@ -252,7 +274,7 @@ int main() {
 			break;
 		case 6:
 			printf("* Function Name: GetElem\n");
-			printf("* Parameter: const SqList &L, int i ElemType &e\n");
+			printf("* Parameter: const LinkedList &L, int i ElemType &e\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: get the i-th element of the list(i starts from 1)\n");
 			printf("please enter the id of the list:");
@@ -286,7 +308,7 @@ int main() {
 			break;
 		case 7:
 			printf("* Function Name: LocateElem\n");
-			printf("* Parameter: const SqList &L, const ElemType &e\n");
+			printf("* Parameter: const LinkedList &L, const ElemType &e\n");
 			printf("* Return: int\n");
 			printf("* Use: return the number of the element that equals the parameter(number starts from 1)\n");
 			printf("please enter the id of the list:");
@@ -319,7 +341,7 @@ int main() {
 			break;
 		case 8:
 			printf("* Function Name: PriorElem\n");
-			printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &pre_e\n");
+			printf("* Parameter: const LinkedList &L, ElemType &cur_e, ElemType &pre_e\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: get the the prior element of the specified element, pass it using parameter.\n");
 			printf("please enter the id of the list:");
@@ -338,7 +360,7 @@ int main() {
 				ElemType cur;
 				ElemType value;
 				scanf("%d", &cur);
-				status res =PriorElem(*head, cur,value);
+				status res = PriorElem(*head, cur, value);
 				head = L;
 
 				if (res == ERROR) {
@@ -353,7 +375,7 @@ int main() {
 			break;
 		case 9:
 			printf("* Function Name: NextElem\n");
-			printf("* Parameter: const SqList &L, ElemType &cur_e, ElemType &next_e\n");
+			printf("* Parameter: const LinkedList &L, ElemType &cur_e, ElemType &next_e\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: get the the next element of the specified element, pass it using parameter.\n");
 			printf("please enter the id of the list:");
@@ -387,7 +409,7 @@ int main() {
 			break;
 		case 10:
 			printf("* Function Name: ListInsert\n");
-			printf("* Parameter: SqList &L, int i, ElemType &e\n");
+			printf("* Parameter: LinkedList &L, int i, ElemType &e\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: insert an element after the specifyed number(the list must be non-empty)\n");
 			printf("please enter the id of the list:");
@@ -421,7 +443,7 @@ int main() {
 			break;
 		case 11:
 			printf("* Function Name: ListDelete\n");
-			printf("* Parameter: SqList &L, int i, ElemType &e\n");
+			printf("* Parameter: LinkedList &L, int i, ElemType &e\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: Delete the specified element.\n");
 			printf("please enter the id of the list:");
@@ -440,7 +462,7 @@ int main() {
 				printf("please input the number of the element\n");
 				scanf("%d", &num);
 				ElemType e;
-				status res = ListDelete(*head, num,e);
+				status res = ListDelete(*head, num, e);
 				head = L;
 				if (res == ERROR) {
 					printf("Sorry, we encounter an error.\n");
@@ -453,7 +475,7 @@ int main() {
 			break;
 		case 12:
 			printf("* Function Name: ListTraverse\n");
-			printf("* Parameter: const SqList &L\n");
+			printf("* Parameter: const LinkedList &L\n");
 			printf("* Return: Status(int)\n");
 			printf("* Use: Traverse the list and output its elements.\n");
 			printf("please enter the id of the list:");
