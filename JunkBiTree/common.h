@@ -5,11 +5,14 @@
 #include <malloc.h>
 #include <cstdlib>
 #include <cstring>
+#include <queue>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::memset;
+using std::queue;
+
 
 //Page 10 on Textbook
 #define OK           1
