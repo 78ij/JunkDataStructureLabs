@@ -15,6 +15,7 @@
 */
 status IntiaList(SqList &L) {
 	L.listsize = LIST_INIT_SIZE;
+	L.length = 0;
 	L.head = (ElemType *)malloc(sizeof(ElemType) * LIST_INIT_SIZE);
 	if (L.head == NULL) //分配失败
 		return ERROR;
@@ -135,10 +136,11 @@ status NextElem(const SqList &L, const ElemType &cur_e, ElemType &next_e) {
 * Function Name: ListInsert
 * Parameter: SqList &L, int i, ElemType &e
 * Return: Status(int)
-* Use: insert an element after the specifyed number(the list must be non-empty)
+* Use: insert an element after the specifyed number
 */
 status ListInsert(SqList &L, int i, ElemType &e) {
-	if (i < 1 || i > L.length) return ERROR;
+	
+	if (i < 1 || i > L.length + 1) return ERROR;
 	if (L.length + 1 > L.listsize) { //扩大存储空间并复制元素
 		if (L.listsize + LISTINCREMENT > LIST_MAX) return OVERFLOW;
 		L.listsize += LISTINCREMENT;
@@ -162,11 +164,11 @@ status ListInsert(SqList &L, int i, ElemType &e) {
 */
 status ListDelete(SqList &L, int i, ElemType &e) {
 	if (i < 1 || i > L.length) return ERROR;
-	L.length--;
 	GetElem(L, i, e);
-	for (int j = i; j < L.length - 1; j++) {
+	for (int j = i; j < L.length; j++) {
 		*(L.head + j - 1) = *(L.head + j);
 	}
+	L.length--;
 	return OK;
 }
 

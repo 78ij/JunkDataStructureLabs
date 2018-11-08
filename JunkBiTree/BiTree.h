@@ -25,10 +25,10 @@ typedef struct BiTree {
 
 status		InitBiTree(BiTree &T);
 status		DestroyBiTree(BiTree &T);
-status CreateBiTree(BiTree &T, int length, int *preorder, int *inorder, ElemType * data);
+status      CreateBiTree(BiTree &T, int length, int *preorder, int *inorder, ElemType * data);
 status		ClearBiTree(BiTree &T);
 bool		BiTreeEmpty(const BiTree &T);
-//int			BiTreeDepth(const BiTree &T);
+int			BiTreeDepth(const BiTree &T);
 //BiTreeNode *Root(const BiTree &T);
 //status		Value(const BiTree &T, BiTreeNode &e);
 //status		Assign(BiTree &T, BiTreeNode &e,ElemType &value);
