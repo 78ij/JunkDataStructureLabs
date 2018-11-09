@@ -172,7 +172,10 @@ int main() {
 			printf("* Use: destroy the linear list\n");
 			printf("please enter the id of the list:");
 			scanf("%d", &list_index);
-
+			if (head == NULL) {
+				printf("Error, the list %d does not exist.\n", list_index);
+				break;
+			}
 			if (head->ListID == list_index) {
 				head = head->next;
 				DestroyList(*L);

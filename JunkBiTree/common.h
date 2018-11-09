@@ -25,4 +25,4 @@ typedef int ElemType;
 
 
 #endif //#ifndef COMMON_H
-#pragma once
+

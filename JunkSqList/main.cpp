@@ -8,7 +8,7 @@ void PrintMenu(void) {
 	* Use: Print the main menu
 	*/
 
-	printf("\n+----------------------------------------------------+\n");
+	printf("\n+-----------------------------------------------------+\n");
 	printf("|                *THE* LINEAR LIST DEMO               |\n");
 	printf("|                                                     |\n");
 	printf("|                     Functions                       |\n");

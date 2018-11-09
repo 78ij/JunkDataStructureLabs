@@ -9,7 +9,7 @@
 
 typedef struct BiTreeNode {
 	ElemType data;
-	int index; // used to retrieve the tree
+	int index; // used to mark the node
 	BiTreeNode *parent;
 	BiTreeNode *left;
 	BiTreeNode *right;
@@ -29,16 +29,16 @@ status      CreateBiTree(BiTree &T, int length, int *preorder, int *inorder, Ele
 status		ClearBiTree(BiTree &T);
 bool		BiTreeEmpty(const BiTree &T);
 int			BiTreeDepth(const BiTree &T);
-//BiTreeNode *Root(const BiTree &T);
-//status		Value(const BiTree &T, BiTreeNode &e);
-//status		Assign(BiTree &T, BiTreeNode &e,ElemType &value);
-//BiTreeNode *Parent(const BiTree &T, BiTreeNode &e);
-//BiTreeNode *LeftChild(const BiTree &T, BiTreeNode &e);
-//BiTreeNode *RightChild(const BiTree &T, BiTreeNode &e);
-//BiTreeNode *LeftSibling(const BiTree &T, BiTreeNode &e);
-//BiTreeNode *RightSibling(const BiTree &T, BiTreeNode &e);
-//status      InsertChild(BiTree &T, BiTreeNode &p, int LR, BiTree &c);
-//status      DeleteChild(BiTree &T, BiTreeNode &p, int LR);
+BiTreeNode *Root(const BiTree &T);
+status		Value(const BiTree &T, int index, ElemType &value);
+status		Assign(BiTree &T, int index,ElemType &value);
+BiTreeNode *Parent(const BiTree &T, int index);
+BiTreeNode *LeftChild(const BiTree &T, int index);
+BiTreeNode *RightChild(const BiTree &T, int index);
+BiTreeNode *LeftSibling(const BiTree &T, int index);
+BiTreeNode *RightSibling(const BiTree &T, int index);
+status      InsertChild(BiTree &T, int index, int LR, BiTree &c);
+status      DeleteChild(BiTree &T, int index, int LR);
 status      PreOrderTraverse(const BiTree &T);
 status      InOrderTraverse(const BiTree &T);
 status      PostOrderTraverse(const BiTree &T);

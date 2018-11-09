@@ -7,8 +7,8 @@ int main() {
 	BiTree tree;
 	InitBiTree(tree);
 	CreateBiTree(tree, 6, pre, in,data);
-	LevelOrderTraverse(tree);
+	ElemType e = 20;
+	cout << RightSibling(tree,2)->data;
 	cout << endl;
-	cout << BiTreeDepth(tree);
 	system("pause");
 }

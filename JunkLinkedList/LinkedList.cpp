@@ -160,9 +160,9 @@ status NextElem(const LinkedList &L, const ElemType &cur_e, ElemType &next_e) {
 * Use: insert an element after the specifyed number(the list must be non-empty)
 */
 status ListInsert(LinkedList &L, int i, ElemType &e) {
-	if (i < 1 || i > L.length) return ERROR;
+	if (i < 1 || i > L.length + 1) return ERROR;
 	LinkedListNode *ele = L.head;
-	for (int j = 0; j < i; j++) {
+	for (int j = 0; j < i - 1; j++) {
 		ele = ele->next;
 	}
 	LinkedListNode *tmp = (LinkedListNode *)malloc(sizeof(LinkedListNode));

@@ -1,6 +1,8 @@
 #include "BiTree.h"
 
-// Auxiliary functions
+//------------------------------------
+//    Auxiliary functions
+//------------------------------------
 
 enum TraverseMethod {
 	PRE,IN,POST,LEVEL
@@ -86,6 +88,23 @@ int Depth(BiTreeNode * root) {
 	return depth + 1;
 }
 
+BiTreeNode *FindNode(BiTreeNode *root, int index) {
+	if (root == NULL) return NULL;
+	if (root->index == index) return root;
+	else {
+		BiTreeNode *left = FindNode(root->left,index);
+		BiTreeNode *right = FindNode(root->right,index);
+		if (left != NULL) return left;
+		if (right != NULL) return right;
+		return NULL;
+	}
+}
+
+//----------------------------
+//            APIs
+//----------------------------
+
+
 /*
 * Function Name: InitBiTree
 * Parameter: BiTree &T
@@ -155,6 +174,168 @@ int	BiTreeDepth(const BiTree &T) {
 	return Depth(T.root);
 }
 
+/*
+* Function Name: Root
+* Parameter: const BiTree &T
+* Return: BiTreeNode *
+* Use: return the root node of the tree.
+*/
+BiTreeNode *Root(const BiTree &T) {
+	return T.root;
+}
+
+/*
+* Function Name: Value
+* Parameter: const BiTree &T, int index,ElemType &value
+* Return: status
+* Use: return the value of the node
+*/
+status Value(const BiTree &T, int index,ElemType &value) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	else
+		value = node->data;
+	return OK;
+}
+
+/*
+* Function Name: Assign
+* Parameter: BiTree &T, int index, ElemType &value
+* Return: status
+* Use: assign given value to given node
+*/
+status Assign(BiTree &T, int index, ElemType &value) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	else
+		node->data = value;
+	return OK;
+}
+
+/*
+* Function Name: Parent
+* Parameter: const BiTree &T, int index
+* Return: BiTreeNode *
+* Use: return the parent of the given node 
+*/
+BiTreeNode *Parent(const BiTree &T, int index) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	else
+		return node->parent;
+}
+
+/*
+* Function Name: LeftChild
+* Parameter: const BiTree &T, int index
+* Return: BiTreeNode *
+* Use: return the LeftChild of the given node
+*/
+BiTreeNode *LeftChild(const BiTree &T, int index) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	else
+		return node->left;
+}
+
+/*
+* Function Name: RightChild
+* Parameter: const BiTree &T, int index
+* Return: BiTreeNode *
+* Use: return the RightChild of the given node
+*/
+BiTreeNode *RightChild(const BiTree &T, int index) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	else
+		return node->right;
+}
+
+/*
+* Function Name: LeftSibling
+* Parameter: const BiTree &T, int index
+* Return: BiTreeNode *
+* Use: return the LeftSibling of the given node
+*/
+BiTreeNode *LeftSibling(const BiTree &T, int index) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	if (node->parent == NULL) return NULL;
+	else {
+		if (node->parent->left == node)
+			return NULL;
+		if (node->parent->right == node)
+			return node->parent->left;
+	}
+}
+
+/*
+* Function Name: RightSibling
+* Parameter: const BiTree &T, int index
+* Return: BiTreeNode *
+* Use: return the RightSibling of the given node
+*/
+BiTreeNode *RightSibling(const BiTree &T, int index) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	if (node->parent == NULL) return NULL;
+	else {
+		if (node->parent->right == node)
+			return NULL;
+		if (node->parent->left == node)
+			return node->parent->right;
+	}
+}
+
+/*
+* Function Name: InsertChild
+* Parameter: BiTree &T, int index, int LR, BiTree &c
+* Return: status
+* Use: Insert the BiTree to the given node 
+*/
+status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL || c.root == NULL || c.root->right == NULL) return ERROR;
+	if (LR == 0) { // left
+		BiTreeNode *tmp = node->left;
+		c.root->parent = node;
+		node->left = c.root;
+		c.root->right = tmp;
+		return OK;
+	}
+	if (LR == 1) {
+		BiTreeNode *tmp = node->right;
+		c.root->parent = node;
+		node->right = c.root;
+		c.root->right = tmp;
+		return OK;
+	}
+	else return ERROR;
+}
+
+/*
+* Function Name: DeleteChild
+* Parameter: BiTree &T, int index, int LR
+* Return: status
+* Use: delete the child tree of the given node
+*/
+status  DeleteChild(BiTree &T, int index, int LR) {
+	BiTreeNode *node = FindNode(T.root, index);
+	if (node == NULL) return ERROR;
+	if (LR == 0) {
+		if (node->left == NULL) return ERROR;
+		FreeNodes(node->left);
+		node->left = NULL;
+		return OK;
+	}
+	if (LR == 1) {
+		if (node->right == NULL) return ERROR;
+		FreeNodes(node->right);
+		node->right = NULL;
+		return OK;
+	}
+	else return ERROR;
+}
 
 /*
 * Function Name: PreOrderTraverse
