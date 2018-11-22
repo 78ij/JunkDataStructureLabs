@@ -17,12 +17,17 @@ typedef struct BiTreeNode {
 
 typedef struct BiTree {
 	int TreeID = -1;
+	int length;
 	BiTreeNode *root;
 	BiTree *next;
 }BiTree;
 
-//APIs
+enum TraverseMethod {
+	PRE, IN, POST, LEVEL
+};
 
+//APIs
+void        write(BiTreeNode *root, TraverseMethod method, bool isindex, FILE *fp);
 status		InitBiTree(BiTree &T);
 status		DestroyBiTree(BiTree &T);
 status      CreateBiTree(BiTree &T, int length, int *preorder, int *inorder, ElemType * data);

@@ -4,9 +4,30 @@
 //    Auxiliary functions
 //------------------------------------
 
-enum TraverseMethod {
-	PRE,IN,POST,LEVEL
-};
+
+
+void write(BiTreeNode *root, TraverseMethod method, bool isindex,FILE *fp) {
+	if (root == NULL) return;
+	if (isindex) {
+		switch (method) {
+		case PRE:
+			fwrite(&root->index, sizeof(int), 1, fp);
+			write(root->left, method, isindex, fp);
+			write(root->right, method, isindex, fp);
+			break;
+		case IN:
+			write(root->left, method, isindex, fp);
+			fwrite(&root->index, sizeof(int), 1, fp);
+			write(root->right, method, isindex, fp);
+			break;
+		}
+	}
+	else {
+		write(root->left, method, isindex, fp);
+		fwrite(&root->data, sizeof(ElemType), 1, fp);
+		write(root->right, method, isindex, fp);
+	}
+}
 
 void FreeNodes(BiTreeNode *root) {
 	if (root == NULL) return;
@@ -40,44 +61,41 @@ BiTreeNode *Create(int *pre, int *in, int length,ElemType *data) {
 	return root;
 }
 
-void Traverse(BiTreeNode *root, TraverseMethod method, void(* fun)(BiTreeNode * a)) {
+void Traverse(BiTreeNode *root, TraverseMethod method) {
 	if (root == NULL) return;
 	switch (method) {
 	case PRE:
 		cout << root->data << " ";
-		if(fun != NULL)
-			fun(root);
-		Traverse(root->left, PRE, fun);
-		Traverse(root->right, PRE, fun);
+		Traverse(root->left, PRE);
+		Traverse(root->right, PRE);
 		break;
 	case IN:
-		Traverse(root->left, IN, fun);
+		Traverse(root->left, IN);
 		cout << root->data << " ";
-		if (fun != NULL)
-			fun(root);
-		Traverse(root->right, IN, fun);
+		Traverse(root->right, IN);
 		break;
 	case POST:
-		Traverse(root->left, POST, fun);
-		Traverse(root->right, POST, fun);
+		Traverse(root->left, POST);
+		Traverse(root->right, POST);
 		cout << root->data << " ";
-		if (fun != NULL)
-			fun(root);
 		break;
 	case LEVEL:
 		queue<BiTreeNode *> q;
 		q.push(root);
 		while (q.size() != 0) {
 			BiTreeNode * n = q.front();
+			cout << root->data << " ";
 			q.pop();
-			cout << n->data << " ";
-			if (fun != NULL)
-				fun(n);
 			if (n->left != NULL) q.push(n->left);
 			if (n->right != NULL) q.push(n->right);
 		}
 		break;
 	}
+}
+
+int size(BiTreeNode *root) {
+	if (root == NULL) return 0;
+	return 1 + size(root->left) + size(root->right);
 }
 
 int Depth(BiTreeNode * root) {
@@ -114,6 +132,7 @@ BiTreeNode *FindNode(BiTreeNode *root, int index) {
 status InitBiTree(BiTree &T) {
 	T.next = NULL;
 	T.root = NULL;
+	T.length = 0;
 	return OK;
 }
 
@@ -137,6 +156,7 @@ status DestroyBiTree(BiTree &T) {
 */
 status CreateBiTree(BiTree &T, int length, int *preorder, int *inorder, ElemType * data) {
 	T.root = Create(preorder, inorder, length, data);
+	T.length = length;
 	return OK;
 }
 
@@ -301,6 +321,7 @@ status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
 		c.root->parent = node;
 		node->left = c.root;
 		c.root->right = tmp;
+		T.length += c.length;
 		return OK;
 	}
 	if (LR == 1) {
@@ -308,6 +329,7 @@ status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
 		c.root->parent = node;
 		node->right = c.root;
 		c.root->right = tmp;
+		T.length += c.length;
 		return OK;
 	}
 	else return ERROR;
@@ -324,12 +346,14 @@ status  DeleteChild(BiTree &T, int index, int LR) {
 	if (node == NULL) return ERROR;
 	if (LR == 0) {
 		if (node->left == NULL) return ERROR;
+		T.length -= size(node->left);
 		FreeNodes(node->left);
 		node->left = NULL;
 		return OK;
 	}
 	if (LR == 1) {
 		if (node->right == NULL) return ERROR;
+		T.length -= size(node->right);
 		FreeNodes(node->right);
 		node->right = NULL;
 		return OK;
@@ -344,7 +368,7 @@ status  DeleteChild(BiTree &T, int index, int LR) {
 * Use: pre order traverse the tree.
 */
 status PreOrderTraverse(const BiTree &T) {
-	Traverse(T.root, PRE, NULL);
+	Traverse(T.root, PRE);
 	return OK;
 }
 
@@ -355,7 +379,7 @@ status PreOrderTraverse(const BiTree &T) {
 * Use: in order traverse the tree.
 */
 status InOrderTraverse(const BiTree &T) {
-	Traverse(T.root, IN, NULL);
+	Traverse(T.root, IN);
 	return OK;
 }
 
@@ -366,7 +390,7 @@ status InOrderTraverse(const BiTree &T) {
 * Use: post order traverse the tree.
 */
 status PostOrderTraverse(const BiTree &T) {
-	Traverse(T.root, POST, NULL);
+	Traverse(T.root, POST);
 	return OK;
 }
 
@@ -377,6 +401,6 @@ status PostOrderTraverse(const BiTree &T) {
 * Use: level order traverse the tree.
 */
 status LevelOrderTraverse(const BiTree &T) {
-	Traverse(T.root, LEVEL, NULL);
+	Traverse(T.root, LEVEL);
 	return OK;
 }
