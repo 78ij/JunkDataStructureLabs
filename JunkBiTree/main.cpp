@@ -39,7 +39,9 @@ status LoadData(BiTree **head) {
 	* Return Status(int)
 	* Use: load data from file
 	*/
-	FILE *fp = fopen("SLDB", "rb");
+	int *preorder = NULL, *inorder = NULL;
+	ElemType *data = NULL;
+	FILE *fp = fopen("SLDB", "r");
 	if (fp == NULL)
 		return ERROR;
 
@@ -53,13 +55,19 @@ status LoadData(BiTree **head) {
 	}
 	count++;
 	size = tmp->length;
-	int *preorder = (int *)malloc(size * sizeof(int));
-    int *inorder = (int *)malloc(size * sizeof(int));
-	ElemType *data = (ElemType *)malloc(size * sizeof(ElemType));
-	fread(preorder, sizeof(int), size, fp);
-	fread(inorder, sizeof(int), size, fp);
-	fread(data, sizeof(ElemType), size, fp);
-	CreateBiTree(*tmp, size, preorder, inorder, data);
+	if (size != 0) {
+		preorder = (int *)malloc(size * sizeof(int));
+		inorder = (int *)malloc(size * sizeof(int));
+		data = (ElemType *)malloc(size * sizeof(ElemType));
+		fread(preorder, sizeof(int), size, fp);
+		fread(inorder, sizeof(int), size, fp);
+		fread(data, sizeof(ElemType), size, fp);
+		CreateBiTree(*tmp, size, preorder, inorder, data);
+		free(preorder);
+		free(inorder);
+		free(data);
+	}
+
     *head = tmp;
 
 	while (1) {
@@ -71,10 +79,18 @@ status LoadData(BiTree **head) {
 		}
 		count++;
 		size = tmp->length;
-		fread(preorder, sizeof(int), size, fp);
-		fread(inorder, sizeof(int), size, fp);
-		fread(data, sizeof(ElemType), size, fp);
-		CreateBiTree(*tmp, size, preorder, inorder, data);
+		if (size != 0) {
+			preorder = (int *)malloc(size * sizeof(int));
+			inorder = (int *)malloc(size * sizeof(int));
+			data = (ElemType *)malloc(size * sizeof(ElemType));
+			fread(preorder, sizeof(int), size, fp);
+			fread(inorder, sizeof(int), size, fp);
+			fread(data, sizeof(ElemType), size, fp);
+			CreateBiTree(*tmp, size, preorder, inorder, data);
+			free(preorder);
+			free(inorder);
+			free(data);
+		}
 		(*head)->next = tmp;
 		*head = (*head)->next;
 	}
@@ -92,7 +108,7 @@ status SaveData(BiTree *head) {
 	* Use: save data to file
 	*/
 
-	FILE *fp = fopen("SLDB", "wb");
+	FILE *fp = fopen("SLDB", "w");
 	if (fp == NULL)
 		return ERROR;
 	BiTree *L = head, *p = head;
@@ -357,6 +373,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 9:
 			printf("* Function Name: Assign\n");
@@ -387,6 +404,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 10:
 			printf("* Function Name: Parent\n");
@@ -416,6 +434,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 11:
 			printf("* Function Name: LeftChild\n");
@@ -445,6 +464,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 12:
 			printf("* Function Name: RightChild\n");
@@ -474,6 +494,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 13:
 			printf("* Function Name: LeftSibling\n");
@@ -503,6 +524,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 14:
 			printf("* Function Name: RightSibling\n");
@@ -532,6 +554,7 @@ int main() {
 				else
 					cout << "Sorry, we encounter an error." << endl;
 			}
+			head = L;
 			break;
 		case 15:
 			printf("* Function Name: InsertChild\n");
@@ -553,8 +576,10 @@ int main() {
 				int instree_index = 0;
 				cout << "please enter the id of the inserted tree" << endl;
 				cin >> instree_index;
-				BiTree * head2 = L;
+				BiTree *head2 = L;
+				BiTree *pre = L;
 				while (head2 != NULL) {
+					if (pre->next->TreeID != instree_index) pre = pre->next;
 					if (head2->TreeID == instree_index)
 						break;
 					head2 = head2->next;
@@ -572,15 +597,142 @@ int main() {
 					if (LR != 0 && LR != 1)
 					{
 						cout << "invalid input." << endl;
+						head = L;
 						break;
 					}
 					if (InsertChild(*head, index, LR, *head2) != OK)
 						cout << "Sorry, we encounter an error." << endl ;
 					else {
 						cout << "insert complete." << endl;
+						if(L != head2)
+							pre->next = pre->next->next;
+						else {
+							L = head2->next;
+							head = L;
+						}
 					}
 				}
 			}
+			head = L;
+			break;
+		case 16:
+			printf("* Function Name: DeleteChild\n");
+			printf("* Parameter: BiTree &T, int index, int LR\n");
+			printf("* Return: status\n");
+			printf("* Use: delete the child tree of the given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				int index = 0;
+				int LR = 0;
+				cout << "please insert the desiredc index" << endl;
+				cin >> index;
+				cout << "L or R? (L = 0 R = 1)" << endl;
+				cin >> LR;
+				if (DeleteChild(*head, index, LR) == OK) {
+					cout << "delete complete." << endl;
+				}
+				else {
+					cout << "Sorry, we encounter an error." << endl;
+				}
+			}
+			head = L;
+			break;
+		case 17:
+			printf("* Function Name: PreOrderTraverse\n");
+			printf("* Parameter:const BiTree &T\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: pre order traverse the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				cout << "The pre-order traverse of the tree" << tree_index << " is:" << endl;
+				PreOrderTraverse(*head);
+			}
+			head = L;
+			break;
+		case 18:
+			printf("* Function Name: InOrderTraverse\n");
+			printf("* Parameter:const BiTree &T\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: in order traverse the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				cout << "The in-order traverse of the tree" << tree_index << " is:" << endl;
+				InOrderTraverse(*head);
+			}
+			head = L;
+			break;
+		case 19:
+			printf("* Parameter:const BiTree &T\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: in order traverse the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				cout << "The post-order traverse of the tree" << tree_index << " is:" << endl;
+				PostOrderTraverse(*head);
+			}
+			head = L;
+			break;
+		case 20:
+			printf("* Function Name: LevelOrderTraverse\n");
+			printf("* Parameter:const BiTree &T\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: level order traverse the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				cout << "The level-order traverse of the tree" << tree_index << " is:" << endl;
+				LevelOrderTraverse(*head);
+			}
+			head = L;
 			break;
 		case 0:
 			cout << "Thanks for using.";

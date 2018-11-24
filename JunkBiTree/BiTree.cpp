@@ -84,7 +84,7 @@ void Traverse(BiTreeNode *root, TraverseMethod method) {
 		q.push(root);
 		while (q.size() != 0) {
 			BiTreeNode * n = q.front();
-			cout << root->data << " ";
+			cout << n->data << " ";
 			q.pop();
 			if (n->left != NULL) q.push(n->left);
 			if (n->right != NULL) q.push(n->right);
@@ -176,7 +176,9 @@ status ClearBiTree(BiTree &T) {
 	if (T.root == NULL) return OK;
 	FreeNodes(T.root->left);
 	FreeNodes(T.root->right);
+	free(T.root);
 	T.root = NULL;
+	T.length = 0;
 	return OK;
 }
 
@@ -322,14 +324,16 @@ BiTreeNode *RightSibling(const BiTree &T, int index) {
 */
 status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL || c.root == NULL || c.root->right == NULL) return ERROR;
+	if (node == NULL || c.root == NULL || c.root->right != NULL) return ERROR;
 	if (LR == 0) { // left
 		BiTreeNode *tmp = node->left;
 		increaseindex(c.root, T.length);
 		c.root->parent = node;
 		node->left = c.root;
-		c.root->right = tmp;
-		tmp->parent = c.root;
+		if (tmp != NULL) {
+			c.root->right = tmp;
+			tmp->parent = c.root;
+		}
 		T.length += c.length;
 		return OK;
 	}
@@ -338,8 +342,10 @@ status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
 		increaseindex(c.root, T.length);
 		c.root->parent = node;
 		node->right = c.root;
-		c.root->right = tmp;
-		tmp->parent = c.root;
+		if (tmp != NULL) {
+			c.root->right = tmp;
+			tmp->parent = c.root;
+		}
 		T.length += c.length;
 		return OK;
 	}
