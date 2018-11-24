@@ -10,14 +10,14 @@
 typedef struct BiTreeNode {
 	ElemType data;
 	int index; // used to mark the node
-	BiTreeNode *parent;
-	BiTreeNode *left;
-	BiTreeNode *right;
+	BiTreeNode *parent = NULL;
+	BiTreeNode *left = NULL;
+	BiTreeNode *right = NULL;
 }BiTreeNode;
 
 typedef struct BiTree {
 	int TreeID = -1;
-	int length;
+	int length = 0;
 	BiTreeNode *root;
 	BiTree *next;
 }BiTree;

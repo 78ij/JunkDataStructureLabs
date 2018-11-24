@@ -47,13 +47,15 @@ status LoadData(BiTree **head) {
 	int count = 0;
 	BiTree *tmp = (BiTree *)malloc(sizeof(BiTree));
 	size = fread(tmp, sizeof(BiTree), 1, fp);
-	if (size == 0)
+	if (size == 0) {
+		free(tmp);
 		return OK;
+	}
 	count++;
 	size = tmp->length;
 	int *preorder = (int *)malloc(size * sizeof(int));
     int *inorder = (int *)malloc(size * sizeof(int));
-	ElemType *data = (ElemType *)malloc(size * sizeof(int));
+	ElemType *data = (ElemType *)malloc(size * sizeof(ElemType));
 	fread(preorder, sizeof(int), size, fp);
 	fread(inorder, sizeof(int), size, fp);
 	fread(data, sizeof(ElemType), size, fp);
@@ -63,8 +65,10 @@ status LoadData(BiTree **head) {
 	while (1) {
 		BiTree *tmp = (BiTree *)malloc(sizeof(BiTree));
 		size = fread(tmp, sizeof(BiTree), 1, fp);
-		if (size == 0)
-			return OK;
+		if (size == 0) {
+			free(tmp);
+			break;
+		}
 		count++;
 		size = tmp->length;
 		fread(preorder, sizeof(int), size, fp);
@@ -99,6 +103,7 @@ status SaveData(BiTree *head) {
 		write(L->root, IN, false, fp);
 		p = L->next;
 		DestroyBiTree(*L);
+		//free(L);
 		L = p;
 	}
 
@@ -122,6 +127,7 @@ int main() {
 				printf("TreeID:%d\tListlength:%d\t", head->TreeID, head->length);
 				cout << "Preorder Traverse: ";
 				PreOrderTraverse(*head);
+				cout << endl;
 				head = head->next;
 			}
 			head = L;
@@ -139,7 +145,7 @@ int main() {
 				head = head->next;
 			}
 			if (head != NULL) {
-				printf("Error, the list %d already exist.\n", tree_index);
+				printf("Error, the tree %d already exist.\n", tree_index);
 			}
 			else {
 				BiTree *new_tree = (BiTree *)malloc(sizeof(BiTree));
@@ -178,7 +184,7 @@ int main() {
 				head = head->next;
 			}
 			if (head->next == NULL) {
-				printf("Error, the list %d does not exist.\n", tree_index);
+				printf("Error, the tree %d does not exist.\n", tree_index);
 				head = L;
 			}
 			else {
@@ -203,7 +209,7 @@ int main() {
 				head = head->next;
 			}
 			if (head == NULL) {
-				printf("Error, the list %d does not exist.\n", tree_index);
+				printf("Error, the tree %d does not exist.\n", tree_index);
 				head = L;
 			}
 			else {
@@ -228,6 +234,353 @@ int main() {
 			}
 
 			printf("\n");
+			break;
+		case 4:
+			printf("* Function Name: ClearBiTree\n");
+			printf("* Parameter: BiTree &T\n");
+			printf("* Return: Status(int)\n");
+			printf("* Use: clear the BiTree\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				ClearBiTree(*head);
+				head = L;
+				printf("The Tree %d has been cleared.\n", tree_index);
+			}
+			break;
+		case 5:
+			printf("* Function Name: BiTreeEmpty\n");
+			printf("* Parameter: const BiTree &T\n");
+			printf("* Return: bool\n");
+			printf("* Use: check whether the tree is empty\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				bool empty = BiTreeEmpty(*head);
+				head = L;
+				if (empty) {
+					printf("The tree %d is empty!", tree_index);
+				}
+				else {
+					printf("The tree %d is not empty", tree_index);
+				}
+			}
+			break;
+		case 6:
+			printf("* Function Name: BiTreeDepth\n");
+			printf("* Parameter: const BiTree &T\n");
+			printf("* Return: int\n");
+			printf("* Use: calculate the depth of the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				printf("The depth of tree %d is %d", tree_index, BiTreeDepth(*head));
+				head = L;
+			}
+			break;
+		case 7:
+			printf("* Function Name: Root\n");
+			printf("* Parameter: const BiTree &T\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the root node of the tree.\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode * root = Root(*head);
+				head = L;
+				if (root != NULL)
+					printf("The index of the root is %d,the data is %d\n", root->index, root->data);
+				else
+					printf("The root is empty!");
+			}
+			break;
+		case 8:
+			printf("* Function Name: Value\n");
+			printf("* Parameter: const BiTree &T, int index,ElemType &value\n");
+			printf("* Return: status\n");
+			printf("* Use: return the value of the node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				ElemType value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				if (Value(*head, index, value) == OK) {
+					cout << "The value is " << value << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 9:
+			printf("* Function Name: Assign\n");
+			printf("* Parameter: BiTree &T, int index, ElemType &value\n");
+			printf("* Return: status\n");
+			printf("* Use: assign given value to given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				ElemType value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				cout << "Please insert the desired value!" << endl;
+				cin >> value;
+				if (Assign(*head, index, value) == OK) {
+					cout << "The value " << value << "is successfully inserted into the node "<< index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 10:
+			printf("* Function Name: Parent\n");
+			printf("* Parameter: const BiTree &T, int index\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the parent of the given node \n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode *value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				value = Parent(*head, index);
+				if (value != NULL){
+					cout << "The parent data is " << value->data << " and the index is" << value->index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 11:
+			printf("* Function Name: LeftChild\n");
+			printf("* Parameter: const BiTree &T, int index\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the LeftChild of the given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode *value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				value = LeftChild(*head, index);
+				if (value != NULL) {
+					cout << "The left child data is " << value->data << " and the index is" << value->index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 12:
+			printf("* Function Name: RightChild\n");
+			printf("* Parameter: const BiTree &T, int index\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the RightChild of the given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode *value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				value = RightChild(*head, index);
+				if (value != NULL) {
+					cout << "The right child data is " << value->data << " and the index is" << value->index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 13:
+			printf("* Function Name: LeftSibling\n");
+			printf("* Parameter: const BiTree &T, int index\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the LeftSibling of the given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode *value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				value = LeftSibling(*head, index);
+				if (value != NULL) {
+					cout << "The left sibling data is " << value->data << " and the index is" << value->index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 14:
+			printf("* Function Name: RightSibling\n");
+			printf("* Parameter: const BiTree &T, int index\n");
+			printf("* Return: BiTreeNode *\n");
+			printf("* Use: return the RightSibling of the given node\n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				BiTreeNode *value;
+				int index = 0;
+				cout << "Please insert the desired index!" << endl;
+				cin >> index;
+				value = RightSibling(*head, index);
+				if (value != NULL) {
+					cout << "The right sibling data is " << value->data << " and the index is" << value->index << endl;
+				}
+				else
+					cout << "Sorry, we encounter an error." << endl;
+			}
+			break;
+		case 15:
+			printf("* Function Name: InsertChild\n");
+			printf("* Parameter: BiTree &T, int index, int LR, BiTree &c\n");
+			printf("* Return: status\n");
+			printf("* Use: Insert the BiTree to the given node \n");
+			printf("please enter the id of the tree:");
+			scanf("%d", &tree_index);
+			while (head != NULL) {
+				if (head->TreeID == tree_index)
+					break;
+				head = head->next;
+			}
+			if (head == NULL) {
+				printf("Error, the tree %d does not exist.\n", tree_index);
+				head = L;
+			}
+			else {
+				int instree_index = 0;
+				cout << "please enter the id of the inserted tree" << endl;
+				cin >> instree_index;
+				BiTree * head2 = L;
+				while (head2 != NULL) {
+					if (head2->TreeID == instree_index)
+						break;
+					head2 = head2->next;
+				}
+				if (head2 == NULL) {
+					printf("Error, the tree %d does not exist.\n", tree_index);
+					break;
+				}
+				else {
+					int index = 0, LR = 0;
+					cout << "please insert the node index" << endl;
+					cin >> index;
+					cout << "L or R? (L = 0 R = 1)" << endl;
+					cin >> LR;
+					if (LR != 0 && LR != 1)
+					{
+						cout << "invalid input." << endl;
+						break;
+					}
+					if (InsertChild(*head, index, LR, *head2) != OK)
+						cout << "Sorry, we encounter an error." << endl ;
+					else {
+						cout << "insert complete." << endl;
+					}
+				}
+			}
 			break;
 		case 0:
 			cout << "Thanks for using.";

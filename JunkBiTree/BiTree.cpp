@@ -50,8 +50,8 @@ int search(int value, int *string, int length) {
 //data:in order
 BiTreeNode *Create(int *pre, int *in, int length,ElemType *data) {
 	int rootindex = search(pre[0], in, length);
-	BiTreeNode *root = (BiTreeNode *)malloc(sizeof(BiTreeNode));
 	if (rootindex == -1) return NULL;
+	BiTreeNode *root = (BiTreeNode *)malloc(sizeof(BiTreeNode));
 	root->data = data[rootindex];
 	root->index = in[rootindex];
 	root->left = Create(pre + 1, in, rootindex + 1,data);
@@ -93,6 +93,12 @@ void Traverse(BiTreeNode *root, TraverseMethod method) {
 	}
 }
 
+void increaseindex(BiTreeNode *root, int length) {
+	if (root == NULL) return;
+	root->index += length;
+	increaseindex(root->left,length);
+	increaseindex(root->right,length);
+}
 int size(BiTreeNode *root) {
 	if (root == NULL) return 0;
 	return 1 + size(root->left) + size(root->right);
@@ -170,6 +176,7 @@ status ClearBiTree(BiTree &T) {
 	if (T.root == NULL) return OK;
 	FreeNodes(T.root->left);
 	FreeNodes(T.root->right);
+	T.root = NULL;
 	return OK;
 }
 
@@ -240,7 +247,7 @@ status Assign(BiTree &T, int index, ElemType &value) {
 */
 BiTreeNode *Parent(const BiTree &T, int index) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL) return ERROR;
+	if (node == NULL) return NULL;
 	else
 		return node->parent;
 }
@@ -253,7 +260,7 @@ BiTreeNode *Parent(const BiTree &T, int index) {
 */
 BiTreeNode *LeftChild(const BiTree &T, int index) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL) return ERROR;
+	if (node == NULL) return NULL;
 	else
 		return node->left;
 }
@@ -266,7 +273,7 @@ BiTreeNode *LeftChild(const BiTree &T, int index) {
 */
 BiTreeNode *RightChild(const BiTree &T, int index) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL) return ERROR;
+	if (node == NULL) return NULL;
 	else
 		return node->right;
 }
@@ -279,7 +286,7 @@ BiTreeNode *RightChild(const BiTree &T, int index) {
 */
 BiTreeNode *LeftSibling(const BiTree &T, int index) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL) return ERROR;
+	if (node == NULL) return NULL;
 	if (node->parent == NULL) return NULL;
 	else {
 		if (node->parent->left == node)
@@ -297,7 +304,7 @@ BiTreeNode *LeftSibling(const BiTree &T, int index) {
 */
 BiTreeNode *RightSibling(const BiTree &T, int index) {
 	BiTreeNode *node = FindNode(T.root, index);
-	if (node == NULL) return ERROR;
+	if (node == NULL) return NULL;
 	if (node->parent == NULL) return NULL;
 	else {
 		if (node->parent->right == node)
@@ -318,17 +325,21 @@ status  InsertChild(BiTree &T, int index, int LR, BiTree &c) {
 	if (node == NULL || c.root == NULL || c.root->right == NULL) return ERROR;
 	if (LR == 0) { // left
 		BiTreeNode *tmp = node->left;
+		increaseindex(c.root, T.length);
 		c.root->parent = node;
 		node->left = c.root;
 		c.root->right = tmp;
+		tmp->parent = c.root;
 		T.length += c.length;
 		return OK;
 	}
 	if (LR == 1) {
 		BiTreeNode *tmp = node->right;
+		increaseindex(c.root, T.length);
 		c.root->parent = node;
 		node->right = c.root;
 		c.root->right = tmp;
+		tmp->parent = c.root;
 		T.length += c.length;
 		return OK;
 	}
