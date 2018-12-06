@@ -27,6 +27,7 @@ enum TraverseMethod {
 };
 
 //APIs
+bool		isvalid(int *pre, int *in, int length);
 void        write(BiTreeNode *root, TraverseMethod method, bool isindex, FILE *fp);
 status		InitBiTree(BiTree &T);
 status		DestroyBiTree(BiTree &T);

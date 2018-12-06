@@ -29,6 +29,21 @@ void write(BiTreeNode *root, TraverseMethod method, bool isindex,FILE *fp) {
 	}
 }
 
+
+bool isvalid(int *pre, int *in, int length) {
+	vector<int> prev;
+	vector<int> inv;
+	for (int i = 0; i < length; i++) {
+		prev.push_back(*(pre + i));
+		inv.push_back(*(in + i));
+	}
+	sort(prev.begin(), prev.end());
+	sort(inv.begin(), inv.end());
+	for (int i = 0; i < length; i++) {
+		if (prev[i] != inv[i]) return false;
+	}
+	return true;
+}
 void FreeNodes(BiTreeNode *root) {
 	if (root == NULL) return;
 	if (root->left != NULL)
@@ -252,6 +267,7 @@ BiTreeNode *Parent(const BiTree &T, int index) {
 	if (node == NULL) return NULL;
 	else
 		return node->parent;
+
 }
 
 /*

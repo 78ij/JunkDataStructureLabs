@@ -6,13 +6,15 @@
 #include <cstdlib>
 #include <cstring>
 #include <queue>
+#include <vector>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::memset;
 using std::queue;
-
+using std::vector;
+using std::sort;
 
 //Page 10 on Textbook
 #define OK           1

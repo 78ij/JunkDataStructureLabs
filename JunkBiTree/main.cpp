@@ -8,7 +8,7 @@ void PrintMenu(void) {
 	* Use: Print the main menu
 	*/
 
-	printf("\n+---------------------------------------------------+\n");
+	printf("\n+-----------------------------------------------------+\n");
 	printf("|                *THE* BINARY TREE DEMO               |\n");
 	printf("|                                                     |\n");
 	printf("|                     Functions                       |\n");
@@ -140,7 +140,7 @@ int main() {
 		switch (selection) {
 		case -1:
 			while (head != NULL) {
-				printf("TreeID:%d\tListlength:%d\t", head->TreeID, head->length);
+				printf("TreeID:%d\tTreelength:%d\t", head->TreeID, head->length);
 				cout << "Preorder Traverse: ";
 				PreOrderTraverse(*head);
 				cout << endl;
@@ -185,13 +185,13 @@ int main() {
 			printf("please enter the id of the tree:");
 			scanf("%d", &tree_index);
 			if (head == NULL) {
-				printf("Error, the list %d does not exist.\n", tree_index);
+				printf("Error, the Tree %d does not exist.\n", tree_index);
 				break;
 			}
 			if (head->TreeID == tree_index) {
 				head = head->next;
 				DestroyBiTree(*L);
-				printf("List %d has been removed\n", tree_index);
+				printf("Tree %d has been removed\n", tree_index);
 				break;
 			}
 			while (head->next != NULL) {
@@ -207,7 +207,7 @@ int main() {
 				L = head->next;
 				head->next = head->next->next;
 				DestroyBiTree(*L);
-				printf("List %d has been removed\n", tree_index);
+				printf("Tree %d has been removed\n", tree_index);
 				head = tmp;
 			}
 			printf("\n");
@@ -242,6 +242,14 @@ int main() {
 				cout << "please insert the inorder data" << endl;
 				for (int i = 0; i < length; i++) cin >> data[i];
 				ClearBiTree(*head);
+				if (!isvalid(pre, in, length)) {
+					cout << "the index is not valid." << endl;
+					free(pre);
+					free(in);
+					free(data);
+					head = L;
+					break;
+				}
 				CreateBiTree(*head, length, pre, in, data);
 				free(pre);
 				free(in);
