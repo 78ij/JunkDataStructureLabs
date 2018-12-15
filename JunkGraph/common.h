@@ -7,6 +7,7 @@
 #include <cstring>
 #include <queue>
 #include <vector>
+#include <stack>
 #include <map>
 
 using std::cin;
@@ -17,6 +18,7 @@ using std::queue;
 using std::vector;
 using std::sort;
 using std::map;
+using std::stack;
 
 //Page 10 on Textbook
 #define OK           1

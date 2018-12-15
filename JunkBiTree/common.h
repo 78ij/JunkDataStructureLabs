@@ -7,6 +7,7 @@
 #include <cstring>
 #include <queue>
 #include <vector>
+#include <stack>
 
 using std::cin;
 using std::cout;
@@ -14,6 +15,7 @@ using std::endl;
 using std::memset;
 using std::queue;
 using std::vector;
+using std::stack;
 using std::sort;
 
 //Page 10 on Textbook
@@ -27,4 +29,3 @@ typedef int ElemType;
 
 
 #endif //#ifndef COMMON_H
-
