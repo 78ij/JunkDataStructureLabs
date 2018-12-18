@@ -13,16 +13,19 @@ typedef struct GNode {
 
 typedef struct Graph {
 	vector<std::pair<GNode,LinkedList>> data;
+	int vexs = 0;
 	int GraphID = -1;
 	Graph *next;
 } Graph;
 
+
+void write(Graph &G, FILE *fp);
 status CreateGraph(Graph &G, ElemType *Nodedata, int *matrix, int length);
 status DestroyGraph(Graph &G);
 status LocateVex(Graph &G, int index);
 status GetVex(Graph &G, int index);
 status PutVex(Graph &G, int index, ElemType &data);
-status FirstAdjVex(Graph &G, int index, GNode &vex);
+status FirstAdjVex(Graph &G, int index);
 status NextAdjVex(Graph &G, int index, int &adj);
 status InsertVex(Graph &G, ElemType data);
 status DeleteVex(Graph &G, int index);

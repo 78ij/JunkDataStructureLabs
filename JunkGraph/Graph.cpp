@@ -1,6 +1,33 @@
 #include "Graph.h"
 
+void write(Graph &G, FILE *fp) {
+	for (int i = 0; i < G.vexs; i++) {
+		for (int j = 0; j < G.vexs; j++) {
+			LinkedList tmp = G.data[i].second;
+			if (LocateElem(tmp, j) != 0) {
+				int t = 1;
+				fwrite(&t, sizeof(int), 1, fp);
+			}
+			else {
+				int t = -1;
+				fwrite(&t, sizeof(int), 1, fp);
+			}
+		}
+	}
+	for (int i = 0; i < G.vexs;  i++) {
+		fwrite(&(G.data[i].first.nodedata), sizeof(ElemType), 1, fp);
+	}
+
+}
+
+/*
+* Function Name: CreateGraph
+* Parameter: Graph &G, ElemType *Nodedata, int *matrix, int length
+* Return: Status(int)
+* Use: create a graph.
+*/
 status CreateGraph(Graph &G, ElemType *Nodedata, int *matrix, int length) {
+	G.vexs = length;
 	for (int i = 0; i < length; i++) {
 		GNode node{ i,*(Nodedata + i) };
 		LinkedList list;
@@ -16,6 +43,12 @@ status CreateGraph(Graph &G, ElemType *Nodedata, int *matrix, int length) {
 	return OK;
 }
 
+/*
+* Function Name: DestroyGraph
+* Parameter: Graph &G
+* Return: Status(int)
+* Use: destroy a graph.
+*/
 status DestroyGraph(Graph &G) {
 	for (int i = 0; i < G.data.size(); i++) {
 		ClearList(G.data[i].second);
@@ -24,6 +57,12 @@ status DestroyGraph(Graph &G) {
 	return OK;
 }
 
+/*
+* Function Name: LocateVex
+* Parameter: Graph &G,int index
+* Return: Status(int)
+* Use: locate the desired node.
+*/
 status LocateVex(Graph &G, int index) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
 	cout << "Data: " << G.data[index].first.nodedata << endl;
@@ -33,19 +72,37 @@ status LocateVex(Graph &G, int index) {
 	return OK;
 }
 
+/*
+* Function Name: GetVex
+* Parameter: Graph &G,int index
+* Return: Status(int)
+* Use: get the data of the desired vertex.
+*/
 status GetVex(Graph &G, int index) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
 	cout << "Data: " << G.data[index].first.nodedata << endl;
 	return OK;
 }
 
+/*
+* Function Name: PutVex
+* Parameter: Graph &G,int index,ElemType &data
+* Return: Status(int)
+* Use: assign the desired node a value
+*/
 status PutVex(Graph &G, int index, ElemType &data) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
 	G.data[index].first.nodedata = data;
 	return OK;
 }
 
-status FirstAdjVex(Graph &G, int index, GNode &vex) {
+/*
+* Function Name: FirstAdjVex
+* Parameter: Graph &G,int index
+* Return: Status(int)
+* Use: find the first adjacent vertex
+*/
+status FirstAdjVex(Graph &G, int index) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
 	cout << "First Adjacent Vertex: ";
 	ElemType e;
@@ -53,6 +110,12 @@ status FirstAdjVex(Graph &G, int index, GNode &vex) {
 	cout << e << endl;
 }
 
+/*
+* Function Name: NextAdjVex
+* Parameter: Graph &G, int index, int &adj
+* Return: Status(int)
+* Use: find the next adjacent vertex
+*/
 status NextAdjVex(Graph &G, int index, int &adj) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
 	int i = LocateElem(G.data[index].second, adj);
@@ -64,7 +127,14 @@ status NextAdjVex(Graph &G, int index, int &adj) {
 	return ERROR;
 }
 
+/*
+* Function Name: NextAdjVex
+* Parameter: Graph &G, ElemType data
+* Return: Status(int)
+* Use: insert a vertex
+*/
 status InsertVex(Graph &G, ElemType data) {
+	G.vexs++;
 	int i = G.data.size();
 	GNode node{ i,data };
 	LinkedList list;
@@ -73,8 +143,15 @@ status InsertVex(Graph &G, ElemType data) {
 	return OK;
 }
 
+/*
+* Function Name: NextAdjVex
+* Parameter: Graph &G, int index
+* Return: Status(int)
+* Use: delete the desired vertex
+*/
 status DeleteVex(Graph &G, int index) {
 	if (index > G.data.size() - 1) return ERROR;
+	G.vexs--;
 	DestroyList(G.data[index].second);
 	G.data.erase(G.data.begin() + index);
 	for (int i = 0; i < G.data.size(); i++) {
@@ -89,6 +166,12 @@ status DeleteVex(Graph &G, int index) {
 	return OK;
 }
 
+/*
+* Function Name: InsertArc
+* Parameter: Graph &G, int v, int w
+* Return: Status(int)
+* Use: insert a specified arc
+*/
 status InsertArc(Graph &G, int v, int w){
 	if (v > G.data.size() - 1 || w > G.data.size() - 1) return ERROR;
 	ElemType p;
@@ -100,6 +183,12 @@ status InsertArc(Graph &G, int v, int w){
 	return OK;
 }
 
+/*
+* Function Name: DeleteArc
+* Parameter: Graph &G, int v, int w
+* Return: Status(int)
+* Use: delete a specified arc
+*/
 status DeleteArc(Graph &G, int v, int w) {
 	if (v > G.data.size() - 1 || w > G.data.size() - 1) return ERROR;
 	ElemType p;
@@ -115,6 +204,12 @@ status DeleteArc(Graph &G, int v, int w) {
 	}
 }
 
+/*
+* Function Name: DFSTraverse
+* Parameter: Graph &G
+* Return: Status(int)
+* Use: DFS Traverse
+*/
 status DFSTraverse(Graph &G) {
 	stack<GNode> s;
 	for (int i = 0; i < G.data.size(); i++)
@@ -144,6 +239,12 @@ status DFSTraverse(Graph &G) {
 	return OK;
 }
 
+/*
+* Function Name: BFSTraverse
+* Parameter: Graph &G
+* Return: Status(int)
+* Use: BFS Traverse
+*/
 status BFSTraverse(Graph &G) {
 	queue<GNode> q;
 	for (int i = 0; i < G.data.size(); i++)

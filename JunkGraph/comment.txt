@@ -1,0 +1,104 @@
+printf("/*\n");
+printf("* Function Name: CreateGraph\n");
+printf("* Parameter: Graph &G, ElemType *Nodedata, int *matrix, int length\n");
+printf("* Return: Status(int)\n");
+printf("* Use: create a graph.\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: DestroyGraph\n");
+printf("* Parameter: Graph &G\n");
+printf("* Return: Status(int)\n");
+printf("* Use: destroy a graph.\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: LocateVex\n");
+printf("* Parameter: Graph &G,int index\n");
+printf("* Return: Status(int)\n");
+printf("* Use: locate the desired node.\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: GetVex\n");
+printf("* Parameter: Graph &G,int index\n");
+printf("* Return: Status(int)\n");
+printf("* Use: get the data of the desired vertex.\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: PutVex\n");
+printf("* Parameter: Graph &G,int index,ElemType &data\n");
+printf("* Return: Status(int)\n");
+printf("* Use: assign the desired node a value\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: FirstAdjVex\n");
+printf("* Parameter: Graph &G,int index\n");
+printf("* Return: Status(int)\n");
+printf("* Use: find the first adjacent vertex\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: NextAdjVex\n");
+printf("* Parameter: Graph &G, int index, int &adj\n");
+printf("* Return: Status(int)\n");
+printf("* Use: find the next adjacent vertex\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: NextAdjVex\n");
+printf("* Parameter: Graph &G, ElemType data\n");
+printf("* Return: Status(int)\n");
+printf("* Use: insert a vertex\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: NextAdjVex\n");
+printf("* Parameter: Graph &G, int index\n");
+printf("* Return: Status(int)\n");
+printf("* Use: delete the desired vertex\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: InsertArc\n");
+printf("* Parameter: Graph &G, int v, int w\n");
+printf("* Return: Status(int)\n");
+printf("* Use: insert a specified arc\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: DeleteArc\n");
+printf("* Parameter: Graph &G, int v, int w\n");
+printf("* Return: Status(int)\n");
+printf("* Use: delete a specified arc\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: DFSTraverse\n");
+printf("* Parameter: Graph &G\n");
+printf("* Return: Status(int)\n");
+printf("* Use: DFS Traverse\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
+printf("/*\n");
+printf("* Function Name: BFSTraverse\n");
+printf("* Parameter: Graph &G\n");
+printf("* Return: Status(int)\n");
+printf("* Use: BFS Traverse\n");
+printf("please enter the id of the graph:");
+scanf("%d", &graph_index);
+
