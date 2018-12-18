@@ -252,7 +252,7 @@ status BFSTraverse(Graph &G) {
 		G.data[i].first.visited = false;
 	for (int i = 0; i < G.data.size(); i++) {
 		if (G.data[i].first.visited == false) {
-			cout << G.data[i].first.nodedata << "(" << G.data[i].first.nodeindex << ")" << " ";
+			cout << G.data[i].first.nodedata << "(" << G.data[i].first.nodeindex << ")" << " "; //output format:data(index)
 			q.push(G.data[i].first);
 			G.data[i].first.visited = true;
 		}
