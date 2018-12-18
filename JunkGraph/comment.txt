@@ -55,7 +55,7 @@ printf("please enter the id of the graph:");
 scanf("%d", &graph_index);
 
 printf("/*\n");
-printf("* Function Name: NextAdjVex\n");
+printf("* Function Name: InsertVex\n");
 printf("* Parameter: Graph &G, ElemType data\n");
 printf("* Return: Status(int)\n");
 printf("* Use: insert a vertex\n");
@@ -63,7 +63,7 @@ printf("please enter the id of the graph:");
 scanf("%d", &graph_index);
 
 printf("/*\n");
-printf("* Function Name: NextAdjVex\n");
+printf("* Function Name: DeleteVex\n");
 printf("* Parameter: Graph &G, int index\n");
 printf("* Return: Status(int)\n");
 printf("* Use: delete the desired vertex\n");

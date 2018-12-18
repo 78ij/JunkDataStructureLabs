@@ -108,6 +108,7 @@ status FirstAdjVex(Graph &G, int index) {
 	ElemType e;
 	GetElem(G.data[index].second, 1, e);
 	cout << e << endl;
+	return OK;
 }
 
 /*
@@ -128,7 +129,7 @@ status NextAdjVex(Graph &G, int index, int &adj) {
 }
 
 /*
-* Function Name: NextAdjVex
+* Function Name: InsertVex
 * Parameter: Graph &G, ElemType data
 * Return: Status(int)
 * Use: insert a vertex
@@ -144,7 +145,7 @@ status InsertVex(Graph &G, ElemType data) {
 }
 
 /*
-* Function Name: NextAdjVex
+* Function Name: DeleteVex
 * Parameter: Graph &G, int index
 * Return: Status(int)
 * Use: delete the desired vertex
@@ -216,7 +217,7 @@ status DFSTraverse(Graph &G) {
 		G.data[i].first.visited = false;
 	for (int i = 0; i < G.data.size(); i++) {
 		if (G.data[i].first.visited == false) {
-			cout << G.data[i].first.nodedata << " ";
+			cout << G.data[i].first.nodedata << "(" << G.data[i].first.nodeindex << ")" << " ";
 			s.push(G.data[i].first);
 			G.data[s.top().nodeindex].first.visited = true;
 		}
@@ -228,7 +229,7 @@ status DFSTraverse(Graph &G) {
 				GetElem(G.data[top.nodeindex].second, j, p);
 				if (G.data[p].first.visited == false) {
 					s.push(G.data[p].first);
-					cout << G.data[p].first.nodedata << " ";
+					cout << G.data[p].first.nodedata << "(" << G.data[p].first.nodeindex << ")" << " ";
 					G.data[G.data[p].first.nodeindex].first.visited = true;
 					break;
 				}
@@ -251,7 +252,7 @@ status BFSTraverse(Graph &G) {
 		G.data[i].first.visited = false;
 	for (int i = 0; i < G.data.size(); i++) {
 		if (G.data[i].first.visited == false) {
-			cout << G.data[i].first.nodedata << " ";
+			cout << G.data[i].first.nodedata << "(" << G.data[i].first.nodeindex << ")" << " ";
 			q.push(G.data[i].first);
 			G.data[i].first.visited = true;
 		}
@@ -263,7 +264,7 @@ status BFSTraverse(Graph &G) {
 				GetElem(G.data[top.nodeindex].second, j, p);
 				if (G.data[p].first.visited == false) {
 					q.push(G.data[p].first);
-					cout << G.data[p].first.nodedata << " ";
+					cout << G.data[p].first.nodedata << "(" << G.data[p].first.nodeindex << ")" << " ";
 					G.data[G.data[p].first.nodeindex].first.visited = true;
 				}
 			}
