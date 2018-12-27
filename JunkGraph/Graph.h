@@ -19,10 +19,10 @@ typedef struct Graph {
 } Graph;
 
 
-void write(Graph &G, FILE *fp);
+void   write(Graph &G, FILE *fp);
 status CreateGraph(Graph &G, ElemType *Nodedata, int *matrix, int length);
 status DestroyGraph(Graph &G);
-status LocateVex(Graph &G, int index);
+status LocateVex(Graph &G, ElemType data);
 status GetVex(Graph &G, int index);
 status PutVex(Graph &G, int index, ElemType &data);
 status FirstAdjVex(Graph &G, int index);

@@ -9,7 +9,7 @@ void PrintMenu(void) {
 	*/
 
 	printf("\n+-----------------------------------------------------+\n");
-	printf("|                *THE* LINEAR LIST DEMO               |\n");
+	printf("|                   *THE* DAG DEMO                    |\n");
 	printf("|                                                     |\n");
 	printf("|                     Functions                       |\n");
 	printf("|                                                     |\n");
@@ -272,10 +272,10 @@ int main() {
 				head = L;
 			}
 			else {
-				int index;
-				cout << "please insert the index" << endl;
-				cin >> index;
-				if (GetVex(*head, index) != OK) {
+				ElemType data;
+				cout << "please insert the data" << endl;
+				cin >> data;
+				if (GetVex(*head, data) != OK) {
 					cout << "sorry, we encounter an ERROR." << endl;
 				}
 				head = L;

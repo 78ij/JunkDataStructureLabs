@@ -63,11 +63,15 @@ status DestroyGraph(Graph &G) {
 * Return: Status(int)
 * Use: locate the desired node.
 */
-status LocateVex(Graph &G, int index) {
-	if (index < 0 || index >= G.data.size()) return ERROR;
-	cout << "Data: " << G.data[index].first.nodedata << endl;
-	cout << "AdjVex: ";
-	ListTraverse(G.data[index].second);
+status LocateVex(Graph &G, ElemType data) {
+	int i;
+	for (i = 0; i < G.vexs; i++) {
+		if (G.data[i].first.nodedata == data) {
+			cout << "index: " << G.data[i].first.nodeindex << endl;
+			break;
+		}
+	}
+	if (i == G.vexs) return ERROR;
 	cout << endl;
 	return OK;
 }
@@ -119,6 +123,7 @@ status FirstAdjVex(Graph &G, int index) {
 */
 status NextAdjVex(Graph &G, int index, int &adj) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
+	if (adj < 0 || adj <= G.data.size()) return ERROR;
 	int i = LocateElem(G.data[index].second, adj);
 	int next;
 	if (NextElem(G.data[index].second, i, next) != ERROR) {
@@ -151,11 +156,12 @@ status InsertVex(Graph &G, ElemType data) {
 * Use: delete the desired vertex
 */
 status DeleteVex(Graph &G, int index) {
-	if (index > G.data.size() - 1) return ERROR;
+	if (index > G.data.size() - 1 || index < 0) return ERROR;
 	G.vexs--;
 	DestroyList(G.data[index].second);
 	G.data.erase(G.data.begin() + index);
 	for (int i = 0; i < G.data.size(); i++) {
+		if (G.data[i].first.nodeindex > index) G.data[i].first.nodeindex--;
 		for (int j = 1;; j++) {
 			ElemType p;
 			GetElem(G.data[i].second, j, p);
@@ -174,6 +180,8 @@ status DeleteVex(Graph &G, int index) {
 * Use: insert a specified arc
 */
 status InsertArc(Graph &G, int v, int w){
+	if (v < 0 || w < 0) return ERROR;
+	if (v == w) return ERROR;
 	if (v > G.data.size() - 1 || w > G.data.size() - 1) return ERROR;
 	ElemType p;
 	for (int j = 1; j <= ListLength(G.data[v].second); j++) {
@@ -191,6 +199,8 @@ status InsertArc(Graph &G, int v, int w){
 * Use: delete a specified arc
 */
 status DeleteArc(Graph &G, int v, int w) {
+	if (v < 0 || w < 0) return ERROR;
+	if (v == w) return ERROR;
 	if (v > G.data.size() - 1 || w > G.data.size() - 1) return ERROR;
 	ElemType p;
 	int j;
