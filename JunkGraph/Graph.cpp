@@ -108,6 +108,7 @@ status PutVex(Graph &G, int index, ElemType &data) {
 */
 status FirstAdjVex(Graph &G, int index) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
+	if (ListLength(G.data[index].second) == 0) return ERROR;
 	cout << "First Adjacent Vertex: ";
 	ElemType e;
 	GetElem(G.data[index].second, 1, e);
@@ -123,10 +124,9 @@ status FirstAdjVex(Graph &G, int index) {
 */
 status NextAdjVex(Graph &G, int index, int &adj) {
 	if (index < 0 || index >= G.data.size()) return ERROR;
-	if (adj < 0 || adj <= G.data.size()) return ERROR;
-	int i = LocateElem(G.data[index].second, adj);
+	if (adj < 0 || adj >= G.data.size()) return ERROR;
 	int next;
-	if (NextElem(G.data[index].second, i, next) != ERROR) {
+	if (NextElem(G.data[index].second, adj, next) != ERROR) {
 		cout << "Next is : " << next;
 		return OK;
 	}
@@ -188,7 +188,7 @@ status InsertArc(Graph &G, int v, int w){
 		GetElem(G.data[v].second, j, p);
 		if (p == w) return ERROR;
 	}
-	ListInsert(G.data[v].second, ListLength(G.data[v].second), w);
+	ListInsert(G.data[v].second, ListLength(G.data[v].second) + 1, w);
 	return OK;
 }
 
@@ -208,7 +208,7 @@ status DeleteArc(Graph &G, int v, int w) {
 		GetElem(G.data[v].second, j, p);
 		if (p == w) break;
 	}
-	if (j == ListLength(G.data[v].second)) return ERROR;
+	if (j == ListLength(G.data[v].second) + 1) return ERROR;
 	else {
 		ListDelete(G.data[v].second, j,p);
 		return OK;

@@ -246,7 +246,7 @@ int main() {
 			}
 			else {
 				int index;
-				cout << "please insert the index" << endl;
+				cout << "please insert the data" << endl;
 				cin >> index;
 				if (LocateVex(*head, index) != OK) {
 					cout << "sorry, we encounter an ERROR." << endl;
@@ -533,7 +533,7 @@ int main() {
 			}
 			else {
 				cout << "BFS Traverse: ";
-				DFSTraverse(*head);
+				BFSTraverse(*head);
 				head = L;
 			}
 			printf("\n");
